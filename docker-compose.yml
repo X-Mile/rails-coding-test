@@ -12,7 +12,7 @@ services:
   app:
     build: .
     volumes:
-      - .:/rails
+      - .:/app
     ports:
       - 3000:3000
     depends_on:
