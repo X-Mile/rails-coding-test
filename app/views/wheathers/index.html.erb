@@ -1,2 +1,7 @@
-<h1>Wheathers#index</h1>
-<p>Find me in app/views/wheathers/index.html.erb</p>
+<h1>東京の天気予報</h1>
+<% if @weather_data.present? %>
+  <p>天気: <%= @weather_description %></p>
+  <p>気温(度): <%= @weather_temp %></p>
+<% else %>
+  <%= @error_message %>
+<% end %>
