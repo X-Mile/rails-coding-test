@@ -1,0 +1,2 @@
+module WheathersHelper
+end
