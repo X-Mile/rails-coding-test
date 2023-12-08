@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  get 'wheathers/index', to: 'wheathers#index'
+  get 'weathers/index', to: 'weathers#index'
   devise_for :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

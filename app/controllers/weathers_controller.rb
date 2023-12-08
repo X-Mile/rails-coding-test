@@ -2,7 +2,7 @@ require 'json'
 require 'net/https'
 require 'uri'
 
-class WheathersController < ApplicationController
+class WeathersController < ApplicationController
   def index
     api_key = ENV['OPEN_WEATHER_API']
     city = 'Tokyo'
