@@ -6,9 +6,8 @@ class WeathersController < ApplicationController
   def index
     city = params[:city].present? ? params[:city] : 'Tokyo'
     api_key = ENV['OPEN_WEATHER_API']
-
     begin
-      uri = URI("https://api.openweathermap.org/data/2.5/weather?q=#{city}&appid=#{api_key}&lang=ja&units=metric")
+      uri = URI("https://api.openweathermap.org/data/2.5/weather?q=#{URI.encode_www_form_component(city)}&appid=#{URI.encode_www_form_component(api_key)}&lang=ja&units=metric")
       response = Net::HTTP.get_response(uri)
       
       if response.code == "200"
@@ -26,10 +25,7 @@ class WeathersController < ApplicationController
         @error_message = I18n.t("errors.invalid_response", code: response.code)
       end
     rescue => e
-      # binding.break
-      @error_message = I18n.t("errors.fetch_error", message: e.class)
+      @error_message = I18n.t("errors.fetch_error", message: e.message)
     end
-
-    render :index
   end
 end
