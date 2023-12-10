@@ -1,0 +1,17 @@
+<h1>天気予報</h1>
+<% if @weather_data.present? %>
+  <p>場所: <%= @weather_location %></p>
+  <p>天気: <%= @weather_description %></p>
+  <p>気温(度): <%= @weather_temp %></p>
+<% else %>
+  <%= @error_message %>
+<% end %>
+
+
+<!-- ユーザーに新しいcityを入力させるフォームを追加 -->
+<%= form_with url: weathers_index_path, method: :get do |form| %>
+  <%= form.label :city, "Enter City:" %>
+  <%= form.text_field :city %>
+  <%= form.submit "Search" %>
+  <p>※空白の場合は、東京都が選択されます</p>
+<% end %>
