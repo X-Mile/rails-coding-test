@@ -19,15 +19,13 @@ class WeathersController < ApplicationController
           @weather_description = @weather_data["weather"][0]["description"]
           @weather_temp = @weather_data["main"]["temp"]
         else
-          @error_message = "必要なデータを取得できませんでした"
+          @error_message = I18n.t("errors.data_unavailable")
         end
       else
-        @error_message = "無効なレスポンスです: #{response.code}"
+        @error_message = I18n.t("errors.invalid_response", code: response.code)
       end
-    rescue JSON::ParserError
-      @error_message = "データの解析に失敗しました"
     rescue => e
-      @error_message = "データの取得中にエラーが発生しました: #{e.message}"
+      @error_message = I18n.t("errors.fetch_error", message: e.message)
     end
   end
 end

@@ -1,0 +1,5 @@
+ja:
+  errors:
+    invalid_response: "無効なレスポンスです: %{code}"
+    fetch_error: "データの取得中にエラーが発生しました: %{message}"
+    data_unavailable: "必要なデータを取得できませんでした"
