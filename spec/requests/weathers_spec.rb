@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "Weathers", type: :request do
   describe "GET /index" do
     let(:valid_weather_mock) { double('response', code: '200', body: '{"name": "Tokyo", "weather": [{"description": "clear"}], "main": {"temp": 25}}') }
-    let(:without_data_weather_mock) { double('response', code: '200', body: '{"name": "city_without_data", "data": "no_data"}') }
+    let(:missing_data_weather_mock) { double('response', code: '200', body: '{"name": "city_without_data", "data": "no_data"}') }
     let(:invalid_weather_mock) { double('response', code: '404', body: 'City Not Found') }
     
     context "正しい場所を入力したとき" do
@@ -18,7 +18,7 @@ RSpec.describe "Weathers", type: :request do
 
     context "正しいデータがないとき" do
       it "エラーメッセージが表示されること" do
-        allow(Net::HTTP).to receive(:get_response).and_return(without_data_weather_mock)
+        allow(Net::HTTP).to receive(:get_response).and_return(missing_data_weather_mock)
 
         get "/weathers/index", params: { city: 'invalid_city' }
 
