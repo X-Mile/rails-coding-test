@@ -4,7 +4,6 @@ RSpec.describe "Weathers", type: :request do
   describe "GET /index" do
     let(:valid_weather_mock) { double('response', code: '200', body: '{"name": "Tokyo", "weather": [{"description": "clear"}], "main": {"temp": 25}}') }
     let(:missing_data_weather_mock) { double('response', code: '200', body: '{"name": "city_without_data", "data": "no_data"}') }
-    let(:invalid_weather_mock) { double('response', code: '404', body: 'City Not Found') }
     
     context "正しい場所を入力したとき" do
       it "ステータスコード200が返ってくること" do
@@ -29,12 +28,14 @@ RSpec.describe "Weathers", type: :request do
     
     context "正しい場所を入力しないとき" do
       it "ステータスコード404とエラーメッセージが返ってくること" do
-        allow(Net::HTTP).to receive(:get_response).and_return(invalid_weather_mock)
+        response = Net::HTTPResponse.new(nil, 404, 'Not Found')
+
+        allow(response).to receive(:body).and_return('Not Found')
         
-        get '/weathers/index', params: { city: 'Ooosaka' }
-        
+        get "/weathers/index", params: { city: 'unknown_city'}
+        binding.break
         @error_message = controller.instance_variable_get("@error_message")
-        expect(@error_message).to eq(I18n.t('errors.invalid_response', code: '404'))
+        expect(@error_message).to eq(I18n.t('errors.invalid_response', code: response.code))
       end
     end
 
