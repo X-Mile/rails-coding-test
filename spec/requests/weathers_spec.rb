@@ -11,6 +11,7 @@ RSpec.describe "Weathers", type: :request do
 
         get "/weathers/index", params: { city: "Tokyo"}
 
+        expect(Net::HTTP).to have_received(:get_response)
         expect(response).to have_http_status(:ok)
       end
     end
@@ -19,7 +20,7 @@ RSpec.describe "Weathers", type: :request do
       it "エラーメッセージが表示されること" do
         allow(Net::HTTP).to receive(:get_response).and_return(missing_data_weather_mock)
 
-        get "/weathers/index", params: { city: 'invalid_city' }
+        get "/weathers/index", params: { city: 'city_without_data' }
 
         @error_message = controller.instance_variable_get("@error_message")
         expect(@error_message).to eq(I18n.t('errors.data_unavailable'))
@@ -28,12 +29,12 @@ RSpec.describe "Weathers", type: :request do
     
     context "正しい場所を入力しないとき" do
       it "ステータスコード404とエラーメッセージが返ってくること" do
-        response = Net::HTTPResponse.new(nil, 404, 'Not Found')
 
-        allow(response).to receive(:body).and_return('Not Found')
-        
+        response = Net::HTTPResponse.new(nil, 404, 'Not Found')
+        allow(Net::HTTP).to receive(:get_response).and_return(response)
+
         get "/weathers/index", params: { city: 'unknown_city'}
-        binding.break
+
         @error_message = controller.instance_variable_get("@error_message")
         expect(@error_message).to eq(I18n.t('errors.invalid_response', code: response.code))
       end
